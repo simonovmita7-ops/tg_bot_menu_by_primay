@@ -101,72 +101,53 @@
         </div>
     </div>
 
-    <script>
-            function sendAction(actionName) {
-        const data = JSON.stringify({
-            type: "click",
-            action: actionName
-        });
+<script>
+    // 1. Глобальная инициализация (выполняется один раз при загрузке страницы)
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    // 2. Функция для кнопок
+    function handleAction(action, element) {
+        console.log("Кнопка нажата, action:", action);
         
-        // ЭТО САМАЯ ВАЖНАЯ СТРОКА:
-        window.Telegram.WebApp.sendData(data);
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
-        function handleAction(action, element) {
-            element.classList.add('btn-clicked');
-            tg.HapticFeedback.impactOccurred('light');
-            
+        // Визуальная реакция
+        element.classList.add('btn-clicked');
+        tg.HapticFeedback.impactOccurred('light');
+        
+        // Отправка данных
+        try {
             tg.sendData(JSON.stringify({ "type": "click", "action": action }));
-
-            // Время возврата кнопки — 100 мс (0.1с)
-            setTimeout(() => {
-                element.classList.remove('btn-clicked');
-            }, 100);
+            console.log("Данные отправлены");
+        } catch (e) {
+            console.error("Ошибка отправки:", e);
+            alert("Ошибка отправки: " + e.message);
         }
 
-        function handleForm(type, inputId, element) {
-            const input = document.getElementById(inputId);
-            if (!input || !input.value) return;
-            
-            element.classList.add('btn-clicked');
-            tg.HapticFeedback.impactOccurred('medium');
-            
-            tg.sendData(JSON.stringify({ "type": "input", "action": type, "text": input.value }));
-            input.value = '';
+        // Возврат кнопки
+        setTimeout(() => {
+            element.classList.remove('btn-clicked');
+        }, 150);
+    }
 
-            // Время возврата кнопки — 100 мс (0.1с)
-            setTimeout(() => {
-                element.classList.remove('btn-clicked');
-            }, 100);
+    // 3. Функция для форм
+    function handleForm(type, inputId, element) {
+        const input = document.getElementById(inputId);
+        if (!input || !input.value) {
+            alert("Введите данные!");
+            return;
         }
+        
+        element.classList.add('btn-clicked');
+        tg.HapticFeedback.impactOccurred('medium');
+        
+        tg.sendData(JSON.stringify({ "type": "input", "action": type, "text": input.value }));
+        input.value = '';
 
-        function handleAction(action, element) {
-    console.log("Кнопка нажата, action:", action); // Откройте консоль отладки
-    
-    // Проверка, есть ли объект WebApp
-    if (!window.Telegram || !window.Telegram.WebApp) {
-        alert("Ошибка: WebApp не инициализирован!");
-        return;
+        setTimeout(() => {
+            element.classList.remove('btn-clicked');
+        }, 100);
     }
-
-    element.classList.add('btn-clicked');
-    tg.HapticFeedback.impactOccurred('light');
-    
-    // Добавим try-catch для отлова ошибок JS
-    try {
-        tg.sendData(JSON.stringify({ "type": "click", "action": action }));
-        console.log("Данные отправлены");
-    } catch (e) {
-        console.error("Ошибка отправки данных:", e);
-    }
-
-    setTimeout(() => {
-        element.classList.remove('btn-clicked');
-        // tg.close(); // Временно закомментируйте, чтобы увидеть логи в консоли
-    }, 150);
-}
-    </script>
+</script>
 </body>
 </html>
