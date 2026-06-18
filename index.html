@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: radial-gradient(circle at 50% 0%, #182e10 0%, #080c05 60%, #030502 100%); background-attachment: fixed; color: #ffffff; padding: calc(12px + env(safe-area-inset-top)) 16px calc(60px + env(safe-area-inset-bottom)) 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        body { background: radial-gradient(circle at 50% 0%, #182e10 0%, #080c05 60%, #030502 100%); background-attachment: fixed; color: #ffffff; padding: calc(12px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
         .app-container { width: 100%; max-width: 390px; display: flex; flex-direction: column; gap: 14px; }
         .profile-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 4px 8px 10px 8px; }
         .profile-text { font-size: 16px; font-weight: 600; color: #f1f5f9; line-height: 1.4; max-width: 70%; }
@@ -26,14 +26,6 @@
         .input-field { flex: 1; background-color: #12190d; border: 1px solid #1f2d17; border-radius: 14px; padding: 13px 14px; color: #ffffff; font-size: 14px; outline: none; min-height: 48px; }
         .input-field::placeholder { color: #485f3b; }
         .btn-action { width: auto; min-width: 115px; }
-        .status-item { display: flex; justify-content: space-between; align-items: center; background: #111a0d; padding: 12px 16px; border-radius: 14px; border: 1px solid #1f3018; }
-        .status-value { font-weight: 700; color: #78c800; }
-        .page { display: none; }
-        .page.active { display: flex; flex-direction: column; gap: 14px; }
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: calc(50px + env(safe-area-inset-bottom)); background: rgba(13, 20, 10, 0.9); border-top: 1px solid #1a2a13; display: flex; justify-content: space-around; padding-top: 6px; padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 999; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #4f6e3c; font-size: 11px; font-weight: 600; text-decoration: none; cursor: pointer; gap: 2px; }
-        .nav-item.active { color: #78c800; }
-        .nav-icon { font-size: 20px; }
     </style>
 </head>
 <body>
@@ -46,67 +38,48 @@
             </div>
         </div>
 
-        <div id="page-control" class="page active">
-            <div class="section-block">
-                <div class="section-title">⚡ Подключение</div>
-                <button class="btn btn-filled" onclick="sendToBot('connect')">🎮 Войти на сервер</button>
-                <div class="row-3">
-                    <button class="btn btn-outlined" onclick="sendToBot('reconnect')">🔄 Перезайти</button>
-                    <button class="btn btn-outlined" onclick="sendToBot('disconnect')">❌ Выйти</button>
-                    <button class="btn btn-outlined" onclick="sendToBot('reset')">🛠 Ресет</button>
-                </div>
-            </div>
-
-            <div class="section-block">
-                <div class="section-title">🖥 Серверы Lite</div>
-                <div class="row-3">
-                    <button class="btn btn-filled" onclick="sendToBot('lite1')">🟢 Lite 1</button>
-                    <button class="btn btn-filled" onclick="sendToBot('lite2')">🟢 Lite 2</button>
-                    <button class="btn btn-filled" onclick="sendToBot('lite3')">🟢 Lite 3</button>
-                </div>
-            </div>
-
-            <div class="section-block">
-                <div class="section-title">🖼 Графика Minecraft</div>
-                <div class="row-2">
-                    <button class="btn btn-filled" onclick="sendToBot('graphics_max')">✨ Макс. графика</button>
-                    <button class="btn btn-outlined" onclick="sendToBot('graphics_min')">⚡ Мин. графика</button>
-                </div>
-            </div>
-
-            <div class="section-block">
-                <div class="section-title">💬 Чат / Команда</div>
-                <div class="input-group">
-                    <input type="text" id="chatInput" class="input-field" placeholder="Сообщение в чат...">
-                    <button class="btn btn-outlined btn-action" onclick="sendForm('chat', 'chatInput')">✉️ Отправить</button>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="cmdInput" class="input-field" placeholder="Команда без / ...">
-                    <button class="btn btn-outlined btn-action" onclick="sendForm('cmd', 'cmdInput')">🚀 Выполнить</button>
-                </div>
-            </div>
-
-            <div class="section-block">
-                <div class="section-title">⚙️ Функции</div>
-                <button class="btn btn-filled" onclick="sendToBot('status_check')">🔍 Проверить статус</button>
-                <button class="btn btn-outlined" onclick="sendToBot('esc')">🛑 Нажать ESC</button>
+        <div class="section-block">
+            <div class="section-title">⚡ Подключение</div>
+            <button class="btn btn-filled" onclick="sendToBot('connect')">🎮 Войти на сервер</button>
+            <div class="row-3">
+                <button class="btn btn-outlined" onclick="sendToBot('reconnect')">🔄 Перезайти</button>
+                <button class="btn btn-outlined" onclick="sendToBot('disconnect')">❌ Выйти</button>
+                <button class="btn btn-outlined" onclick="sendToBot('reset')">🛠 Ресет</button>
             </div>
         </div>
 
-        <div id="page-status" class="page">
-            <div class="section-block">
-                <div class="section-title">📊 Текущее состояние бота</div>
-                <div class="status-item"><span>Статус:</span><span class="status-value">В игре 🟢</span></div>
+        <div class="section-block">
+            <div class="section-title">🖥 Серверы Lite</div>
+            <div class="row-3">
+                <button class="btn btn-filled" onclick="sendToBot('lite1')">🟢 Lite 1</button>
+                <button class="btn btn-filled" onclick="sendToBot('lite2')">🟢 Lite 2</button>
+                <button class="btn btn-filled" onclick="sendToBot('lite3')">🟢 Lite 3</button>
             </div>
         </div>
-    </div>
 
-    <div class="nav-bar">
-        <div class="nav-item active" id="tab-control" onclick="switchPage('control')">
-            <span class="nav-icon">🎮</span><span>Управление</span>
+        <div class="section-block">
+            <div class="section-title">🖼 Графика Minecraft</div>
+            <div class="row-2">
+                <button class="btn btn-filled" onclick="sendToBot('graphics_max')">✨ Макс. графика</button>
+                <button class="btn btn-outlined" onclick="sendToBot('graphics_min')">⚡ Мин. графика</button>
+            </div>
         </div>
-        <div class="nav-item" id="tab-status" onclick="switchPage('status')">
-            <span class="nav-icon">📊</span><span>Статус</span>
+
+        <div class="section-block">
+            <div class="section-title">💬 Чат / Команда</div>
+            <div class="input-group">
+                <input type="text" id="chatInput" class="input-field" placeholder="Сообщение в чат...">
+                <button class="btn btn-outlined btn-action" onclick="sendForm('chat', 'chatInput')">✉️ Отправить</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="cmdInput" class="input-field" placeholder="Команда без / ...">
+                <button class="btn btn-outlined btn-action" onclick="sendForm('cmd', 'cmdInput')">🚀 Выполнить</button>
+            </div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">⚙️ Функции</div>
+            <button class="btn btn-outlined" onclick="sendToBot('esc')">🛑 Нажать ESC</button>
         </div>
     </div>
 
@@ -115,22 +88,9 @@
         tg.ready();
         tg.expand();
 
-        function switchPage(pageName) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
-            if(pageName === 'control') {
-                document.getElementById('page-control').classList.add('active');
-                document.getElementById('tab-control').classList.add('active');
-            } else {
-                document.getElementById('page-status').classList.add('active');
-                document.getElementById('tab-status').classList.add('active');
-            }
-        }
-
-        // --- ТОТ САМЫЙ DS (JavaScript) ---
         function sendToBot(action) {
             tg.HapticFeedback.impactOccurred('light');
-            // sendData отправляет объект в Python-бота
+            // sendData отправляет объект в Python-бота и АВТОМАТИЧЕСКИ закрывает WebApp
             tg.sendData(JSON.stringify({ "type": "click", "action": action }));
         }
 
@@ -141,7 +101,6 @@
             tg.sendData(JSON.stringify({ "type": "input", "action": type, "text": input.value }));
             input.value = '';
         }
-        // ---------------------------------
     </script>
 </body>
 </html>
