@@ -102,6 +102,14 @@
     </div>
 
     <script>
+            function sendAction(actionName) {
+        const data = JSON.stringify({
+            type: "click",
+            action: actionName
+        });
+        
+        // ЭТО САМАЯ ВАЖНАЯ СТРОКА:
+        window.Telegram.WebApp.sendData(data);
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
