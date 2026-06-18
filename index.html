@@ -290,6 +290,9 @@
 
     <script>
         const tg = window.Telegram.WebApp;
+        
+        // Инициализация WebApp
+        tg.ready();
         tg.expand();
 
         // Переключение страниц
@@ -306,15 +309,16 @@
             }
         }
 
-        // Отправка данных в бота (окно НЕ закрывается)
+        // Отправка данных в бота
         function sendToBot(action) {
             tg.HapticFeedback.impactOccurred('light');
+            // sendData автоматически закрывает окно WebApp - это поведение Telegram
             tg.sendData(JSON.stringify({ type: 'click', action: action }));
         }
 
         function sendForm(type, inputId) {
             const input = document.getElementById(inputId);
-            if (!input.value) return;
+            if (!input || !input.value) return;
             tg.HapticFeedback.impactOccurred('medium');
             tg.sendData(JSON.stringify({ type: 'input', action: type, text: input.value }));
             input.value = '';
