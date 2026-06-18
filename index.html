@@ -2,10 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>AmNom Bot Menu</title>
     <style>
-        /* Базовые настройки стиля под Telegram WebApp */
+        /* Оптимизация под мобильные экраны и iOS (iPhone 13 Pro) */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,27 +17,29 @@
         body {
             background-color: #080c05;
             color: #ffffff;
-            padding: 16px;
+            /* Учет безопасных зон сверху и снизу iPhone */
+            padding: calc(12px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom)) 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .app-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 390px; /* Идеальная ширина для iPhone 13 Pro */
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
-        /* Блок профиля Ам Няма */
+        /* Блок профиля */
         .profile-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .profile-title {
@@ -71,11 +73,11 @@
         .section-block {
             background: rgba(22, 32, 16, 0.6);
             border-radius: 22px;
-            padding: 16px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.02);
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.01);
         }
 
         .section-title {
@@ -87,27 +89,40 @@
             margin-bottom: 2px;
         }
 
-        /* Общие стили кнопок */
+        /* Базовый класс кнопки */
         .btn {
-            background-color: #78c800;
-            color: #ffffff;
             border: none;
             border-radius: 16px;
             padding: 14px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            transition: background 0.15s, transform 0.1s;
+            gap: 6px;
+            transition: background 0.15s, transform 0.1s, opacity 0.15s;
             width: 100%;
+            min-height: 48px; /* Оптимально для нажатия пальцем на iOS */
         }
 
         .btn:active {
-            transform: scale(0.98);
-            background-color: #64a500;
+            transform: scale(0.97);
+            opacity: 0.85;
+        }
+
+        /* 🟢 СТИЛЬ 1: Залитые кнопки (Первая строчка) */
+        .btn-filled {
+            background-color: #78c800;
+            color: #ffffff;
+        }
+
+        /* ⚪ СТИЛЬ 2: Обводка кнопок (Вторая строчка) */
+        .btn-outlined {
+            background-color: transparent;
+            color: #78c800;
+            border: 2px solid #78c800;
+            padding: 12px; /* Компенсация толщины бордера */
         }
 
         /* Сетки для кнопок */
@@ -123,7 +138,7 @@
             gap: 8px;
         }
 
-        /* Стили полей ввода с кнопками справа */
+        /* Стили ввода */
         .input-group {
             display: flex;
             gap: 8px;
@@ -140,6 +155,7 @@
             color: #ffffff;
             font-size: 14px;
             outline: none;
+            min-height: 48px;
             transition: border-color 0.2s;
         }
 
@@ -154,13 +170,6 @@
         .btn-action {
             width: auto;
             min-width: 115px;
-            padding: 13px;
-            font-size: 14px;
-            background-color: #78c800;
-        }
-
-        .btn-action:active {
-            background-color: #64a500;
         }
     </style>
 </head>
@@ -177,19 +186,20 @@
 
         <div class="section-block">
             <div class="section-title">⚡ Подключение</div>
-            <button class="btn">🎮 Войти на сервер</button>
-            <div class="row-2">
-                <button class="btn">🔄 Перезайти</button>
-                <button class="btn">🛠 Восстановить</button>
+            <button class="btn btn-filled">🎮 Войти на сервер</button>
+            <div class="row-3">
+                <button class="btn btn-outlined" style="font-size: 12px;">🔄 Перезайти</button>
+                <button class="btn btn-outlined" style="font-size: 12px;">❌ Выйти</button>
+                <button class="btn btn-outlined" style="font-size: 12px;">🛠 Ресет</button>
             </div>
         </div>
 
         <div class="section-block">
             <div class="section-title">🖥 Серверы Lite</div>
             <div class="row-3">
-                <button class="btn">🟢 Lite 1</button>
-                <button class="btn">🟢 Lite 2</button>
-                <button class="btn">🟢 Lite 3</button>
+                <button class="btn btn-filled">🟢 Lite 1</button>
+                <button class="btn btn-filled">🟢 Lite 2</button>
+                <button class="btn btn-filled">🟢 Lite 3</button>
             </div>
         </div>
 
@@ -197,20 +207,18 @@
             <div class="section-title">💬 Чат / Команда</div>
             <div class="input-group">
                 <input type="text" class="input-field" placeholder="Сообщение в чат...">
-                <button class="btn btn-action">✉️ Отправить</button>
+                <button class="btn btn-filled btn-action">✉️ Отправить</button>
             </div>
             <div class="input-group">
                 <input type="text" class="input-field" placeholder="Команда без / ...">
-                <button class="btn btn-action">🚀 Выполнить</button>
+                <button class="btn btn-outlined btn-action">🚀 Выполнить</button>
             </div>
         </div>
 
         <div class="section-block">
             <div class="section-title">⚙️ Функции</div>
-            <div class="row-2">
-                <button class="btn">🔍 Статус</button>
-                <button class="btn">🛑 Нажать ESC</button>
-            </div>
+            <button class="btn btn-filled">🔍 Проверить статус</button>
+            <button class="btn btn-outlined">🛑 Нажать ESC</button>
         </div>
 
     </div>
