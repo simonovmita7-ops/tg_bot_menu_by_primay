@@ -133,6 +133,32 @@
                 element.classList.remove('btn-clicked');
             }, 100);
         }
+
+        function handleAction(action, element) {
+    console.log("Кнопка нажата, action:", action); // Откройте консоль отладки
+    
+    // Проверка, есть ли объект WebApp
+    if (!window.Telegram || !window.Telegram.WebApp) {
+        alert("Ошибка: WebApp не инициализирован!");
+        return;
+    }
+
+    element.classList.add('btn-clicked');
+    tg.HapticFeedback.impactOccurred('light');
+    
+    // Добавим try-catch для отлова ошибок JS
+    try {
+        tg.sendData(JSON.stringify({ "type": "click", "action": action }));
+        console.log("Данные отправлены");
+    } catch (e) {
+        console.error("Ошибка отправки данных:", e);
+    }
+
+    setTimeout(() => {
+        element.classList.remove('btn-clicked');
+        // tg.close(); // Временно закомментируйте, чтобы увидеть логи в консоли
+    }, 150);
+}
     </script>
 </body>
 </html>
