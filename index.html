@@ -6,191 +6,32 @@
     <title>AmNom Bot Menu</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: radial-gradient(circle at 50% 0%, #182e10 0%, #080c05 60%, #030502 100%);
-            background-attachment: fixed;
-            color: #ffffff;
-            padding: calc(12px + env(safe-area-inset-top)) 16px calc(60px + env(safe-area-inset-bottom)) 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 390px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        /* ШАПКА ПРОФИЛЯ */
-        .profile-header {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 8px 10px 8px;
-        }
-
-        .profile-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f1f5f9;
-            line-height: 1.4;
-            max-width: 70%;
-        }
-
-        .profile-text span {
-            color: #78c800;
-            font-size: 19px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .profile-avatar-container {
-            width: 75px;
-            height: 75px;
-        }
-
-        .profile-avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        /* КАРТОЧКИ СЕКЦИЙ */
-        .section-block {
-            background: rgba(22, 32, 16, 0.6);
-            border-radius: 22px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.01);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .section-title {
-            font-size: 11px;
-            font-weight: 800;
-            color: #718861;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-
-        /* КНОПКИ */
-        .btn {
-            border: none;
-            border-radius: 16px;
-            padding: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.15s, transform 0.1s, opacity 0.15s;
-            width: 100%;
-            min-height: 48px;
-        }
-
-        .btn:active {
-            transform: scale(0.97);
-            opacity: 0.85;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: radial-gradient(circle at 50% 0%, #182e10 0%, #080c05 60%, #030502 100%); background-attachment: fixed; color: #ffffff; padding: calc(12px + env(safe-area-inset-top)) 16px calc(60px + env(safe-area-inset-bottom)) 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        .app-container { width: 100%; max-width: 390px; display: flex; flex-direction: column; gap: 14px; }
+        .profile-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 4px 8px 10px 8px; }
+        .profile-text { font-size: 16px; font-weight: 600; color: #f1f5f9; line-height: 1.4; max-width: 70%; }
+        .profile-text span { color: #78c800; font-size: 19px; font-weight: 800; letter-spacing: 0.5px; display: block; margin-top: 2px; }
+        .profile-avatar-container { width: 75px; height: 75px; }
+        .profile-avatar { width: 100%; height: 100%; object-fit: contain; }
+        .section-block { background: rgba(22, 32, 16, 0.6); border-radius: 22px; padding: 14px; display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .section-title { font-size: 11px; font-weight: 800; color: #718861; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 2px; }
+        .btn { border: none; border-radius: 16px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: background 0.15s, transform 0.1s, opacity 0.15s; width: 100%; min-height: 48px; }
+        .btn:active { transform: scale(0.97); opacity: 0.85; }
         .btn-filled { background-color: #78c800; color: #ffffff; }
-        
-        .btn-outlined {
-            background-color: transparent;
-            color: #78c800;
-            border: 2px solid #78c800;
-            padding: 12px;
-        }
-
+        .btn-outlined { background-color: transparent; color: #78c800; border: 2px solid #78c800; padding: 12px; }
         .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-
-        /* ИНПУТЫ */
         .input-group { display: flex; gap: 8px; align-items: center; width: 100%; }
-        
-        .input-field {
-            flex: 1;
-            background-color: #12190d;
-            border: 1px solid #1f2d17;
-            border-radius: 14px;
-            padding: 13px 14px;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-            min-height: 48px;
-        }
+        .input-field { flex: 1; background-color: #12190d; border: 1px solid #1f2d17; border-radius: 14px; padding: 13px 14px; color: #ffffff; font-size: 14px; outline: none; min-height: 48px; }
         .input-field::placeholder { color: #485f3b; }
-
         .btn-action { width: auto; min-width: 115px; }
-
-        /* СТАТУС-БАРЫ НА 2 СТРАНИЦЕ */
-        .status-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111a0d;
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid #1f3018;
-        }
+        .status-item { display: flex; justify-content: space-between; align-items: center; background: #111a0d; padding: 12px 16px; border-radius: 14px; border: 1px solid #1f3018; }
         .status-value { font-weight: 700; color: #78c800; }
-
-        /* СТРАНИЦЫ (ВКЛАДКИ) */
         .page { display: none; }
         .page.active { display: flex; flex-direction: column; gap: 14px; }
-
-        /* НИЖНЕЕ МЕНЮ НАВИГАЦИИ (iOS стиль) */
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: calc(50px + env(safe-area-inset-bottom));
-            background: rgba(13, 20, 10, 0.9);
-            border-top: 1px solid #1a2a13;
-            display: flex;
-            justify-content: space-around;
-            padding-top: 6px;
-            padding-bottom: env(safe-area-inset-bottom);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 999;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #4f6e3c;
-            font-size: 11px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            gap: 2px;
-        }
-
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: calc(50px + env(safe-area-inset-bottom)); background: rgba(13, 20, 10, 0.9); border-top: 1px solid #1a2a13; display: flex; justify-content: space-around; padding-top: 6px; padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 999; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #4f6e3c; font-size: 11px; font-weight: 600; text-decoration: none; cursor: pointer; gap: 2px; }
         .nav-item.active { color: #78c800; }
         .nav-icon { font-size: 20px; }
     </style>
@@ -198,7 +39,6 @@
 <body>
 
     <div class="app-container">
-        
         <div class="profile-header">
             <div class="profile-text">Меню управления игроком <span>Primay64</span></div>
             <div class="profile-avatar-container">
@@ -211,9 +51,9 @@
                 <div class="section-title">⚡ Подключение</div>
                 <button class="btn btn-filled" onclick="sendToBot('connect')">🎮 Войти на сервер</button>
                 <div class="row-3">
-                    <button class="btn btn-outlined" style="font-size: 12px;" onclick="sendToBot('reconnect')">🔄 Перезайти</button>
-                    <button class="btn btn-outlined" style="font-size: 12px;" onclick="sendToBot('disconnect')">❌ Выйти</button>
-                    <button class="btn btn-outlined" style="font-size: 12px;" onclick="sendToBot('reset')">🛠 Ресет</button>
+                    <button class="btn btn-outlined" onclick="sendToBot('reconnect')">🔄 Перезайти</button>
+                    <button class="btn btn-outlined" onclick="sendToBot('disconnect')">❌ Выйти</button>
+                    <button class="btn btn-outlined" onclick="sendToBot('reset')">🛠 Ресет</button>
                 </div>
             </div>
 
@@ -256,50 +96,28 @@
         <div id="page-status" class="page">
             <div class="section-block">
                 <div class="section-title">📊 Текущее состояние бота</div>
-                <div class="status-item">
-                    <span>Статус подключения:</span>
-                    <span class="status-value" id="status-online">В игре 🟢</span>
-                </div>
-                <div class="status-item">
-                    <span>Текущий сервер:</span>
-                    <span class="status-value" id="status-server">Lite 2</span>
-                </div>
-                <div class="status-item">
-                    <span>Режим графики:</span>
-                    <span class="status-value" id="status-gfx">Минимальный (Boost)</span>
-                </div>
-                <div class="status-item">
-                    <span>Последнее действие:</span>
-                    <span class="status-value" style="color: #a3b899; font-size: 13px;" id="status-action">Авто-реконнект активен</span>
-                </div>
+                <div class="status-item"><span>Статус:</span><span class="status-value">В игре 🟢</span></div>
             </div>
         </div>
-
     </div>
 
     <div class="nav-bar">
         <div class="nav-item active" id="tab-control" onclick="switchPage('control')">
-            <span class="nav-icon">🎮</span>
-            <span>Управление</span>
+            <span class="nav-icon">🎮</span><span>Управление</span>
         </div>
         <div class="nav-item" id="tab-status" onclick="switchPage('status')">
-            <span class="nav-icon">📊</span>
-            <span>Статус</span>
+            <span class="nav-icon">📊</span><span>Статус</span>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        
-        // Инициализация WebApp
         tg.ready();
         tg.expand();
 
-        // Переключение страниц
         function switchPage(pageName) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
-            
             if(pageName === 'control') {
                 document.getElementById('page-control').classList.add('active');
                 document.getElementById('tab-control').classList.add('active');
@@ -309,20 +127,21 @@
             }
         }
 
-        // Отправка данных в бота
+        // --- ТОТ САМЫЙ DS (JavaScript) ---
         function sendToBot(action) {
             tg.HapticFeedback.impactOccurred('light');
-            // sendData автоматически закрывает окно WebApp - это поведение Telegram
-            tg.sendData(JSON.stringify({ type: 'click', action: action }));
+            // sendData отправляет объект в Python-бота
+            tg.sendData(JSON.stringify({ "type": "click", "action": action }));
         }
 
         function sendForm(type, inputId) {
             const input = document.getElementById(inputId);
             if (!input || !input.value) return;
             tg.HapticFeedback.impactOccurred('medium');
-            tg.sendData(JSON.stringify({ type: 'input', action: type, text: input.value }));
+            tg.sendData(JSON.stringify({ "type": "input", "action": type, "text": input.value }));
             input.value = '';
         }
+        // ---------------------------------
     </script>
 </body>
 </html>
