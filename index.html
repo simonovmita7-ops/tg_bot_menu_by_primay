@@ -292,11 +292,7 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Сервер, куда шлем запросы (твой запущенный Python на ПК)
-        // Если тестируешь локально, укажи IP твоего ПК или через ngrok
-        const BACKEND_URL = "http://localhost:5000/api/command"; 
-
-        // Переключение страниц БЕЗ закрытия окна
+        // Переключение страниц
         function switchPage(pageName) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
@@ -310,26 +306,18 @@
             }
         }
 
-        // Отправка простых команд по клику (ОКНО НЕ ЗАКРЫВАЕТСЯ!)
-        function sendToBot(commandName) {
-            fetch(BACKEND_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'click', command: commandName })
-            }).catch(err => console.log("Бот на ПК еще не запущен или не настроен"));
+        // Отправка данных в бота (окно НЕ закрывается)
+        function sendToBot(action) {
+            tg.HapticFeedback.impactOccurred('light');
+            tg.sendData(JSON.stringify({ type: 'click', action: action }));
         }
 
-        // Отправка форм (чат и консоль)
         function sendForm(type, inputId) {
             const input = document.getElementById(inputId);
             if (!input.value) return;
-            
-            fetch(BACKEND_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: type, value: input.value })
-            }).then(() => { input.value = ''; })
-              .catch(err => console.log("Ошибка отправки"));
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.sendData(JSON.stringify({ type: 'input', action: type, text: input.value }));
+            input.value = '';
         }
     </script>
 </body>
