@@ -3,306 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ам Ням Пульт</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>AmNom Bot Menu</title>
     <style>
-        :root {
-            --amnam-green: #7BC014;
-            --amnam-dark-green: #5A9E10;
-            --bg-gradient: radial-gradient(circle at center, #162607 0%, #090d04 100%);
-            --panel-bg: rgba(255, 255, 255, 0.05);
-            --text-color: #ffffff;
-        }
-
+        /* Базовые настройки стиля под Telegram WebApp */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-color);
+            background-color: #080c05;
+            color: #ffffff;
             padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        .page {
-            display: none;
-            flex-direction: column;
+        .app-container {
             width: 100%;
-        }
-
-        .page.active {
+            max-width: 420px;
             display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        /* Картинка Ам Няма */
-        .header-container {
-            text-align: center;
-            margin-bottom: 20px;
+        /* Блок профиля Ам Няма */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 4px;
         }
 
-        .omnom-avatar {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 16px;
-            border: 3px solid var(--amnam-green);
-            box-shadow: 0 4px 15px rgba(123, 192, 20, 0.4);
+        .profile-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+            letter-spacing: 0.5px;
         }
 
-        .section {
-            background: var(--panel-bg);
+        .profile-avatar-container {
+            width: 82px;
+            height: 82px;
+            border: 2.5px solid #78c800;
             border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(120, 200, 0, 0.45);
+            background-color: #11180c;
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Стили контейнеров (карт) */
+        .section-block {
+            background: rgba(22, 32, 16, 0.6);
+            border-radius: 22px;
             padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .section-title {
-            font-size: 14px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #718861;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 12px;
+            margin-bottom: 2px;
+        }
+
+        /* Общие стили кнопок */
+        .btn {
+            background-color: #78c800;
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            padding: 14px;
+            font-size: 15px;
             font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.15s, transform 0.1s;
+            width: 100%;
         }
 
-        /* Сетка кнопок */
-        .grid-1 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
+        .btn:active {
+            transform: scale(0.98);
+            background-color: #64a500;
         }
 
-        .grid-2 {
+        /* Сетки для кнопок */
+        .row-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
 
-        .grid-3 {
+        .row-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-
-        /* Стиль кнопок (как на твоем скриншоте, но в цвете Ам Няма) */
-        .btn {
-            background: var(--amnam-green);
-            color: #fff;
-            border: none;
-            padding: 14px;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 10px rgba(123, 192, 20, 0.2);
         }
 
-        .btn:active {
-            background: var(--amnam-dark-green);
-            transform: scale(0.98);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            box-shadow: none;
-        }
-        .btn-secondary:active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-danger {
-            background: #cc3333;
-            box-shadow: 0 4px 10px rgba(204, 51, 51, 0.2);
-        }
-        .btn-danger:active {
-            background: #992222;
-        }
-
-        /* Инпуты */
+        /* Стили полей ввода с кнопками справа */
         .input-group {
             display: flex;
             gap: 8px;
-            margin-bottom: 10px;
+            align-items: center;
+            width: 100%;
         }
 
-        .input-group:last-child {
-            margin-bottom: 0;
-        }
-
-        input {
+        .input-field {
             flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 16px;
-            border-radius: 16px;
-            color: #fff;
-            font-size: 15px;
+            background-color: #12190d;
+            border: 1px solid #1f2d17;
+            border-radius: 14px;
+            padding: 13px 14px;
+            color: #ffffff;
+            font-size: 14px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        input:focus {
-            border-color: var(--amnam-green);
+        .input-field:focus {
+            border-color: #558c00;
         }
 
-        /* Страница статуса */
-        .status-card {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(123, 192, 20, 0.2);
-            margin-bottom: 20px;
-            text-align: center;
+        .input-field::placeholder {
+            color: #485f3b;
         }
 
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #00ff00;
-            border-radius: 50%;
-            margin-right: 8px;
-            box-shadow: 0 0 10px #00ff00;
+        .btn-action {
+            width: auto;
+            min-width: 115px;
+            padding: 13px;
+            font-size: 14px;
+            background-color: #78c800;
         }
 
-        .spacer {
-            flex-grow: 1;
+        .btn-action:active {
+            background-color: #64a500;
         }
     </style>
 </head>
 <body>
 
-    <div id="main-page" class="page active">
+    <div class="app-container">
         
-        <div class="header-container">
-            <img src="omnom.jpg" alt="Om Nom" class="omnom-avatar">
-        </div>
-
-        <div class="section">
-            <div class="section-title">Подключение</div>
-            <div class="grid-1">
-                <button class="btn" onclick="sendClick('connect')">Войти полностью</button>
-            </div>
-            <div class="grid-2">
-                <button class="btn" onclick="sendClick('reconnect')">Перезайти</button>
-                <button class="btn" onclick="sendClick('again')">Восстановить</button>
+        <div class="profile-section">
+            <div class="profile-title">Om Nom</div>
+            <div class="profile-avatar-container">
+                <img src="omnom.png" alt="Om Nom" class="profile-avatar">
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Серверы lite</div>
-            <div class="grid-3">
-                <button class="btn" onclick="sendClick('lite1')">Lite 1</button>
-                <button class="btn" onclick="sendClick('lite2')">Lite 2</button>
-                <button class="btn" onclick="sendClick('lite3')">Lite 3</button>
+        <div class="section-block">
+            <div class="section-title">⚡ Подключение</div>
+            <button class="btn">🎮 Войти на сервер</button>
+            <div class="row-2">
+                <button class="btn">🔄 Перезайти</button>
+                <button class="btn">🛠 Восстановить</button>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Чат/Команда</div>
+        <div class="section-block">
+            <div class="section-title">🖥 Серверы Lite</div>
+            <div class="row-3">
+                <button class="btn">🟢 Lite 1</button>
+                <button class="btn">🟢 Lite 2</button>
+                <button class="btn">🟢 Lite 3</button>
+            </div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">💬 Чат / Команда</div>
             <div class="input-group">
-                <input type="text" id="chat-input" placeholder="Сообщение в чат...">
-                <button class="btn" onclick="sendInput('chat', 'chat-input')">Отправить</button>
+                <input type="text" class="input-field" placeholder="Сообщение в чат...">
+                <button class="btn btn-action">✉️ Отправить</button>
             </div>
             <div class="input-group">
-                <input type="text" id="cmd-input" placeholder="Команда без / ...">
-                <button class="btn" onclick="sendInput('command', 'cmd-input')">Выполнить</button>
+                <input type="text" class="input-field" placeholder="Команда без / ...">
+                <button class="btn btn-action">🚀 Выполнить</button>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Функции</div>
-            <div class="grid-2" style="margin-bottom: 10px;">
-                <button class="btn btn-secondary" onclick="openStatusPage()">Проверить статус</button>
-                <button class="btn btn-secondary" onclick="sendClick('esc')">Нажать ESC</button>
-            </div>
-            <div class="grid-2" style="margin-bottom: 10px;">
-                <button class="btn btn-secondary" onclick="sendClick('gfx_afk')">AFK-графика</button>
-                <button class="btn btn-secondary" onclick="sendClick('gfx_game')">Игровая графика</button>
-            </div>
-            <div class="grid-1">
-                <button class="btn btn-secondary" onclick="sendClick('hub')">В хаб</button>
-                <button class="btn btn-secondary" onclick="sendClick('screen')">Сделать скриншот</button>
+        <div class="section-block">
+            <div class="section-title">⚙️ Функции</div>
+            <div class="row-2">
+                <button class="btn">🔍 Статус</button>
+                <button class="btn">🛑 Нажать ESC</button>
             </div>
         </div>
 
-        <div class="spacer"></div>
-
-        <button class="btn btn-danger" style="margin-top: 10px;" onclick="sendClick('exit')">Выйти с сервера</button>
     </div>
 
-    <div id="status-page" class="page">
-        <div class="header-container">
-            <img src="omnom.jpg" alt="Om Nom" class="omnom-avatar">
-        </div>
-
-        <div class="section">
-            <div class="section-title">Текущее состояние</div>
-            <div class="status-card">
-                <h3><span class="status-indicator"></span>Бот активен</h3>
-                <p style="margin-top: 10px; color: rgba(255,255,255,0.7); font-size: 14px;">
-                    Запрос отправлен на ПК. Полный лог и скриншот локации отправлены в диалог с ботом.
-                </p>
-            </div>
-        </div>
-
-        <div class="spacer"></div>
-        
-        <button class="btn btn-secondary" onclick="closeStatusPage()">🔙 Назад</button>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
-
-        // Навигация страниц
-        function openStatusPage() {
-            document.getElementById('main-page').classList.remove('active');
-            document.getElementById('status-page').classList.add('active');
-            
-            // Отправляем сигнал боту, чтобы он параллельно выдал инфу в чат
-            sendTelegramData({ type: "click", action: "status" });
-        }
-
-        function closeStatusPage() {
-            document.getElementById('status-page').classList.remove('active');
-            document.getElementById('main-page').classList.add('active');
-        }
-
-        // Отправка простых кликов
-        function sendClick(actionName) {
-            sendTelegramData({ type: "click", action: actionName });
-        }
-
-        // Отправка текста из инпутов
-        function sendInput(actionName, inputId) {
-            const inputEl = document.getElementById(inputId);
-            const value = inputEl.value.trim();
-            if (value) {
-                sendTelegramData({ type: "input", action: actionName, text: value });
-                inputEl.value = ""; // Очищаем поле после отправки
-            }
-        }
-
-        // Базовая функция отправки
-        function sendTelegramData(data) {
-            tg.sendData(JSON.stringify(data));
-        }
-    </script>
 </body>
 </html>
