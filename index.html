@@ -24,10 +24,11 @@
         /* Стандартное нажатие */
         .btn:active { transform: scale(0.97); opacity: 0.85; }
         
-        /* Класс, который JS вешает на 0.3с */
+        /* Класс для "впадания" на 0.1с */
         .btn-clicked { 
             transform: scale(0.97) !important; 
             background-color: #5a9100 !important; 
+            color: #ffffff !important;
             opacity: 0.9 !important;
         }
 
@@ -74,7 +75,7 @@
         <div class="section-block">
             <div class="section-title">🖼 Графика Minecraft</div>
             <div class="row-2">
-                <button class="btn btn-filled" onclick="handleAction('graphics_max', this)">✨ Макс. графика</button>
+                <button class="btn btn-outlined" onclick="handleAction('graphics_max', this)">✨ Макс. графика</button>
                 <button class="btn btn-outlined" onclick="handleAction('graphics_min', this)">⚡ Мин. графика</button>
             </div>
         </div>
@@ -106,17 +107,15 @@
         tg.expand();
 
         function handleAction(action, element) {
-            // Применяем класс "впадения"
             element.classList.add('btn-clicked');
             tg.HapticFeedback.impactOccurred('light');
             
-            // Отправляем данные
             tg.sendData(JSON.stringify({ "type": "click", "action": action }));
 
-            // Убираем класс через 300мс (возвращаем кнопку в норму)
+            // Время возврата кнопки — 100 мс (0.1с)
             setTimeout(() => {
                 element.classList.remove('btn-clicked');
-            }, 300);
+            }, 100);
         }
 
         function handleForm(type, inputId, element) {
@@ -129,9 +128,10 @@
             tg.sendData(JSON.stringify({ "type": "input", "action": type, "text": input.value }));
             input.value = '';
 
+            // Время возврата кнопки — 100 мс (0.1с)
             setTimeout(() => {
                 element.classList.remove('btn-clicked');
-            }, 300);
+            }, 100);
         }
     </script>
 </body>
