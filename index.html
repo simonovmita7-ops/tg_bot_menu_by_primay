@@ -2,152 +2,193 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AmNom Bot Menu</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: radial-gradient(circle at 50% 0%, #182e10 0%, #080c05 60%, #030502 100%); background-attachment: fixed; color: #ffffff; padding: calc(12px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .app-container { width: 100%; max-width: 390px; display: flex; flex-direction: column; gap: 14px; }
-        
-        .profile-header { display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 4px 8px 10px 8px; }
-        .profile-text { font-size: 16px; font-weight: 600; color: #f1f5f9; line-height: 1.4; max-width: 70%; }
-        .profile-text span { color: #78c800; font-size: 19px; font-weight: 800; letter-spacing: 0.5px; display: block; margin-top: 2px; }
-        .profile-avatar-container { width: 75px; height: 75px; }
-        .profile-avatar { width: 100%; height: 100%; object-fit: contain; }
-        
-        .section-block { background: rgba(22, 32, 16, 0.6); border-radius: 22px; padding: 14px; display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        body { background-color: #080c05; color: #ffffff; padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; }
+        .profile-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
+        .profile-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #f1f5f9; letter-spacing: 0.5px; }
+        .profile-avatar-container { width: 82px; height: 82px; border: 2.5px solid #78c800; border-radius: 20px; display: flex; justify-content: center; align-items: center; overflow: hidden; box-shadow: 0 0 20px rgba(120,200,0,0.45); background-color: #11180c; }
+        .profile-avatar { width: 100%; height: 100%; object-fit: cover; }
+        .section-block { background: rgba(22,32,16,0.6); border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.02); }
         .section-title { font-size: 11px; font-weight: 800; color: #718861; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 2px; }
-        
-        .btn { border: none; border-radius: 16px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: background 0.15s, transform 0.1s, opacity 0.15s; width: 100%; min-height: 48px; }
-        
-        /* Стандартное нажатие */
-        .btn:active { transform: scale(0.97); opacity: 0.85; }
-        
-        /* Класс для "впадания" на 0.1с */
-        .btn-clicked { 
-            transform: scale(0.97) !important; 
-            background-color: #5a9100 !important; 
-            color: #ffffff !important;
-            opacity: 0.9 !important;
-        }
-
-        .btn-filled { background-color: #78c800; color: #ffffff; }
-        .btn-outlined { background-color: transparent; color: #78c800; border: 2px solid #78c800; padding: 12px; }
-        
+        .btn { background-color: #78c800; color: #ffffff; border: none; border-radius: 16px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: background 0.15s, transform 0.1s; width: 100%; position: relative; overflow: hidden; }
+        .btn:active { transform: scale(0.97); background-color: #64a500; }
         .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         .input-group { display: flex; gap: 8px; align-items: center; width: 100%; }
-        .input-field { flex: 1; background-color: #12190d; border: 1px solid #1f2d17; border-radius: 14px; padding: 13px 14px; color: #ffffff; font-size: 14px; outline: none; min-height: 48px; }
+        .input-field { flex: 1; background-color: #12190d; border: 1px solid #1f2d17; border-radius: 14px; padding: 13px 14px; color: #ffffff; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        .input-field:focus { border-color: #558c00; }
         .input-field::placeholder { color: #485f3b; }
-        .btn-action { width: auto; min-width: 115px; }
+        .btn-action { width: auto; min-width: 115px; padding: 13px; font-size: 14px; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a2a10; border: 1px solid #78c800; color: #fff; padding: 10px 20px; border-radius: 16px; font-size: 14px; font-weight: 600; z-index: 999; transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; white-space: nowrap; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .debug { font-size: 10px; color: #3a5a2a; text-align: center; padding: 4px; word-break: break-all; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="profile-header">
-            <div class="profile-text">Меню управления игроком <span>Primay64</span></div>
-            <div class="profile-avatar-container">
-                <img src="omnom.png" alt="Om Nom" class="profile-avatar">
-            </div>
-        </div>
+<div class="toast" id="toast"></div>
 
-        <div class="section-block">
-            <div class="section-title">⚡ Подключение</div>
-            <button class="btn btn-filled" onclick="handleAction('connect', this)">🎮 Войти на сервер</button>
-            <div class="row-3">
-                <button class="btn btn-outlined" onclick="handleAction('reconnect', this)">🔄 Перезайти</button>
-                <button class="btn btn-outlined" onclick="handleAction('disconnect', this)">❌ Выйти</button>
-                <button class="btn btn-outlined" onclick="handleAction('reset', this)">🛠 Ресет</button>
-            </div>
-        </div>
+<div class="app-container">
 
-        <div class="section-block">
-            <div class="section-title">🖥 Серверы Lite</div>
-            <div class="row-3">
-                <button class="btn btn-outlined" onclick="handleAction('lite1', this)">🟢 Lite 1</button>
-                <button class="btn btn-outlined" onclick="handleAction('lite2', this)">🟢 Lite 2</button>
-                <button class="btn btn-outlined" onclick="handleAction('lite3', this)">🟢 Lite 3</button>
-            </div>
-        </div>
-
-        <div class="section-block">
-            <div class="section-title">🖼 Графика Minecraft</div>
-            <div class="row-2">
-                <button class="btn btn-outlined" onclick="handleAction('graphics_max', this)">✨ Максимальня графика</button>
-                <button class="btn btn-outlined" onclick="handleAction('graphics_min', this)">⚡ Минимальня графика</button>
-            </div>
-        </div>
-
-        <div class="section-block">
-            <div class="section-title">💬 Чат / Команда</div>
-            <div class="input-group">
-                <input type="text" id="chatInput" class="input-field" placeholder="Сообщение в чат...">
-                <button class="btn btn-outlined btn-action" onclick="handleForm('chat', 'chatInput', this)">✉️ Отправить</button>
-            </div>
-            <div class="input-group">
-                <input type="text" id="cmdInput" class="input-field" placeholder="Команда без / ...">
-                <button class="btn btn-outlined btn-action" onclick="handleForm('cmd', 'cmdInput', this)">🚀 Выполнить</button>
-            </div>
-        </div>
-
-        <div class="section-block">
-            <div class="section-title">⚙️ Функции</div>
-            <div class="row-2">
-                <button class="btn btn-outlined" onclick="handleAction('esc', this)">🛑 Нажать ESC</button>
-                <button class="btn btn-outlined" onclick="handleAction('screen', this)">📸 Скриншот</button>
-            </div>
+    <div class="profile-section">
+        <div class="profile-title">Om Nom</div>
+        <div class="profile-avatar-container">
+            <img src="omnom.png" alt="Om Nom" class="profile-avatar" onerror="this.style.display='none'">
         </div>
     </div>
 
+    <!-- Отладка — видна только тебе, мелким текстом -->
+    <div class="debug" id="debug-info">загрузка...</div>
+
+    <!-- Подключение -->
+    <div class="section-block">
+        <div class="section-title">⚡ Подключение</div>
+        <button class="btn" onclick="sendAction('connect')">🎮 Войти на сервер</button>
+        <div class="row-2">
+            <button class="btn" onclick="sendAction('reconnect')">🔄 Перезайти</button>
+            <button class="btn" onclick="sendAction('reset')">🛠 Восстановить</button>
+        </div>
+        <button class="btn" onclick="sendAction('disconnect')">🔚 Выйти с сервера</button>
+        <button class="btn" onclick="sendAction('hub')">🔙 Вернуться в хаб</button>
+    </div>
+
+    <!-- Серверы Lite -->
+    <div class="section-block">
+        <div class="section-title">🖥 Серверы Lite</div>
+        <div class="row-3">
+            <button class="btn" onclick="sendAction('lite1')">🟢 Lite 1</button>
+            <button class="btn" onclick="sendAction('lite2')">🔴 Lite 2</button>
+            <button class="btn" onclick="sendAction('lite3')">🔵 Lite 3</button>
+        </div>
+    </div>
+
+    <!-- Графика -->
+    <div class="section-block">
+        <div class="section-title">🎨 Графика</div>
+        <div class="row-2">
+            <button class="btn" onclick="sendAction('graphics_min')">💤 AFK-графика</button>
+            <button class="btn" onclick="sendAction('graphics_max')">👾 Игровая</button>
+        </div>
+    </div>
+
+    <!-- Чат / Команда -->
+    <div class="section-block">
+        <div class="section-title">💬 Чат / Команда</div>
+        <div class="input-group">
+            <input type="text" id="chat-input" class="input-field" placeholder="Сообщение в чат...">
+            <button class="btn btn-action" onclick="sendInput('chat', 'chat-input')">✉️ Отправить</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="cmd-input" class="input-field" placeholder="Команда без / ...">
+            <button class="btn btn-action" onclick="sendInput('command', 'cmd-input')">🚀 Выполнить</button>
+        </div>
+    </div>
+
+    <!-- Функции -->
+    <div class="section-block">
+        <div class="section-title">⚙️ Функции</div>
+        <div class="row-2">
+            <button class="btn" onclick="sendAction('status')">🔍 Статус</button>
+            <button class="btn" onclick="sendAction('esc')">🛑 ESC</button>
+        </div>
+        <button class="btn" onclick="sendAction('screen')">📸 Скриншот</button>
+    </div>
+
+</div>
+
 <script>
-    // 1. Глобальная инициализация (выполняется один раз при загрузке страницы)
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
-    // 2. Функция для кнопок
-    function handleAction(action, element) {
-        console.log("Кнопка нажата, action:", action);
-        
-        // Визуальная реакция
-        element.classList.add('btn-clicked');
-        tg.HapticFeedback.impactOccurred('light');
-        
-        // Отправка данных
-        try {
-            tg.sendData(JSON.stringify({ "type": "click", "action": action }));
-            console.log("Данные отправлены");
-        } catch (e) {
-            console.error("Ошибка отправки:", e);
-            alert("Ошибка отправки: " + e.message);
-        }
+    const BOT_TOKEN = "8948833460:AAGsNDx7wDlTPzBonIaIat9LcW3XQzD85oI";
 
-        // Возврат кнопки
-        setTimeout(() => {
-            element.classList.remove('btn-clicked');
-        }, 150);
+    // Твой ID захардкожен как запасной вариант.
+    // Когда WebApp открыт через кнопку меню BotFather — initDataUnsafe.user
+    // может быть undefined, поэтому берём FALLBACK_CHAT_ID.
+    const FALLBACK_CHAT_ID = 5759416910;
+
+    // canUseSendData = true только когда открыто через KeyboardButton с web_app=WebAppInfo
+    // В этом случае initData непустой и sendData() работает.
+    // Через кнопку меню BotFather — initData пустой, идём через fetch к Bot API.
+    const canUseSendData = !!(tg.initData && tg.initData.length > 0);
+    const chatId = tg.initDataUnsafe?.user?.id || FALLBACK_CHAT_ID;
+
+    // Отладочная строка — видна мелким текстом под аватаром
+    document.getElementById('debug-info').textContent =
+        `mode: ${canUseSendData ? 'sendData' : 'API fetch'} | chatId: ${chatId}`;
+
+    // === Toast ===
+    let toastTimer = null;
+    function showToast(text) {
+        const t = document.getElementById('toast');
+        t.textContent = text;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    // 3. Функция для форм
-    function handleForm(type, inputId, element) {
-        const input = document.getElementById(inputId);
-        if (!input || !input.value) {
-            alert("Введите данные!");
+    // === Отправка данных ===
+    async function sendData(payload) {
+        const json = JSON.stringify(payload);
+
+        if (canUseSendData) {
+            // Режим KeyboardButton: sendData закрывает WebApp и передаёт данные боту
+            tg.sendData(json);
+            tg.close();
             return;
         }
-        
-        element.classList.add('btn-clicked');
-        tg.HapticFeedback.impactOccurred('medium');
-        
-        tg.sendData(JSON.stringify({ "type": "input", "action": type, "text": input.value }));
-        input.value = '';
 
-        setTimeout(() => {
-            element.classList.remove('btn-clicked');
-        }, 100);
+        // Режим кнопки меню BotFather: шлём сообщение боту через Telegram Bot API
+        try {
+            const resp = await fetch(
+                `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: `/wa_action ${json}`
+                    })
+                }
+            );
+            const result = await resp.json();
+            if (result.ok) {
+                showToast("✅ Готово");
+            } else {
+                showToast("❌ " + result.description);
+            }
+        } catch (err) {
+            showToast("❌ Ошибка сети");
+            console.error(err);
+        }
     }
+
+    function sendAction(action) {
+        showToast("⏳ Отправляю...");
+        sendData({ type: "click", action });
+    }
+
+    function sendInput(action, inputId) {
+        const val = document.getElementById(inputId).value.trim();
+        if (!val) { showToast("⚠️ Введите текст"); return; }
+        document.getElementById(inputId).value = '';
+        showToast("⏳ Отправляю...");
+        sendData({ type: "input", action, text: val });
+    }
+
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendInput('chat', 'chat-input');
+    });
+    document.getElementById('cmd-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendInput('command', 'cmd-input');
+    });
 </script>
+
 </body>
 </html>
